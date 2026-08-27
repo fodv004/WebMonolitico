@@ -53,7 +53,9 @@ Esto conserva 4NF: autores, géneros, conceptos e imágenes no se repiten como g
 
    Abre `http://IP_DEL_SERVIDOR:3000`. Si usas firewalld: `sudo firewall-cmd --permanent --add-port=3000/tcp && sudo firewall-cmd --reload`.
 
-El dato de ejemplo del esquema usa un hash ilustrativo. Para que el primer administrador pueda iniciar sesión, reemplaza su contraseña por un hash bcrypt generado localmente (por ejemplo con `node -e "require('bcrypt').hash('UnaClaveSegura',12).then(console.log)"`) y ejecuta `UPDATE usuarios SET password_hash='HASH_GENERADO' WHERE correo='admin@libreria.com';`.
+El dato de ejemplo del esquema usa un hash ilustrativo. Para que el primer administrador pueda iniciar sesión con una contraseña real, reemplázala por un hash bcrypt generado localmente (por ejemplo con `node -e "require('bcrypt').hash('UnaClaveSegura',12).then(console.log)"`) y ejecuta `UPDATE usuarios SET password_hash='HASH_GENERADO' WHERE correo='admin@libreria.com';`.
+
+El login detecta si `password_hash` tiene formato bcrypt (`$2a$`/`$2b$`/`$2y$`); si no lo tiene, compara la contraseña en texto plano. Esto permite que el usuario de prueba `demo@libreria.com` / `demo1234` (incluido en el esquema, sin hashear) entre directamente a la pantalla principal y de búsqueda sin pasos adicionales. Es solo para pruebas/demo: cualquier cuenta real debe guardarse siempre con `password_hash` generado por bcrypt.
 
 ## Estructura
 

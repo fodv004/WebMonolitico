@@ -126,6 +126,13 @@ INSERT INTO conceptos (nombre) VALUES ('Realismo mágico'), ('Soledad'), ('Memor
 INSERT INTO usuarios (nombre, correo, password_hash, es_admin)
 VALUES ('Admin Principal', 'admin@libreria.com', 'hash_de_ejemplo', TRUE);
 
+-- Usuario de demostración con contraseña SIN hashear (texto plano).
+-- El login detecta que password_hash no tiene formato bcrypt y compara en texto plano,
+-- permitiendo entrar al catálogo/búsqueda sin depender de un hash generado previamente.
+-- Uso exclusivo de pruebas/demo: no usar este patrón para cuentas reales en producción.
+INSERT INTO usuarios (nombre, correo, password_hash, es_admin)
+VALUES ('Usuario Demo', 'demo@libreria.com', 'demo1234', FALSE);
+
 INSERT INTO libros (isbn, titulo, anio_publicacion, precio, stock, id_formato)
 VALUES ('9780307474728', 'Cien años de soledad', 1967, 350.00, 20, 1);
 
