@@ -1,5 +1,21 @@
 const express=require('express'),multer=require('multer'),path=require('path'); const auth=require('../middleware/auth'),a=require('../controllers/authController'),c=require('../controllers/catalogController'),u=require('../controllers/userController'),b=require('../controllers/bookController'); const router=express.Router();
-const storage=multer.diskStorage({destination:path.join(__dirname,'../../public/uploads'),filename:(req,file,cb)=>cb(null,Date.now()+'-'+file.originalname.replace(/[^a-zA-Z0-9._-]/g,'_'))});const upload=multer({storage,fileFilter:(req,file,cb)=>cb(null,file.mimetype.startsWith('image/'))});
+const EXTENSIONES_PERMITIDAS=['.jpg','.jpeg','.png','.webp'];
+const storage=multer.diskStorage({
+  destination:path.join(__dirname,'../../public/uploads'),
+  // Nombre generado por el sistema (timestamp + random), nunca el nombre original del usuario.
+  filename:(req,file,cb)=>cb(null,Date.now()+'-'+Math.round(Math.random()*1e9)+path.extname(file.originalname).toLowerCase())
+});
+const upload=multer({
+  storage,
+  limits:{fileSize:5*1024*1024}, // máximo 5MB por imagen
+  fileFilter:(req,file,cb)=>{
+    const extension=path.extname(file.originalname).toLowerCase();
+    const mimeValido=['image/jpeg','image/png','image/webp'].includes(file.mimetype);
+    const extensionValida=EXTENSIONES_PERMITIDAS.includes(extension);
+    if(mimeValido && extensionValida) return cb(null, true);
+    cb(new Error('Formato de imagen no permitido. Usa JPG, PNG o WebP.'));
+  }
+});
 router.get('/login',a.loginForm);router.post('/login',a.login);router.get('/registro',a.registerForm);router.post('/registro',a.register);router.post('/logout',a.logout);
 router.use(auth.requireAuth);router.get('/',b.list);
 router.get('/catalogos/:type',auth.requireAdmin,c.list);router.get('/catalogos/:type/nuevo',auth.requireAdmin,c.form);router.post('/catalogos/:type',auth.requireAdmin,c.save);router.get('/catalogos/:type/:id/editar',auth.requireAdmin,c.form);router.post('/catalogos/:type/:id',auth.requireAdmin,c.save);router.post('/catalogos/:type/:id/eliminar',auth.requireAdmin,c.remove);

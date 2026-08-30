@@ -1,6 +1,6 @@
 const books=require('../models/bookModel'),catalog=require('../models/catalogModel');
 const selections=async()=>({formatos:await catalog.list('formatos'),autores:await catalog.list('autores'),generos:await catalog.list('generos'),conceptos:await catalog.list('conceptos')});
-exports.list=async(req,res,next)=>{try{res.render('books/list',{items:await books.list()})}catch(e){next(e)}};
+exports.list=async(req,res,next)=>{try{res.render('books/list',{items:await books.list(req.query.q),q:req.query.q||''})}catch(e){next(e)}};
 exports.detail=async(req,res,next)=>{try{const book=await books.get(req.params.isbn);if(!book)return res.status(404).render('error',{message:'Libro no encontrado.'});res.render('books/detail',{book, ...(await selections())})}catch(e){next(e)}};
 exports.form=async(req,res,next)=>{try{res.render('books/form',{book:req.params.isbn?await books.get(req.params.isbn):null,...(await selections())})}catch(e){next(e)}};
 exports.save=async(req,res,next)=>{try{await books.save(req.body,req.params.isbn);await books.setRelations(req.body.isbn,req.body);res.redirect('/libros/'+req.body.isbn)}catch(e){next(e)}};
