@@ -1,1 +1,33 @@
-</main><footer>Aplicación web monolítica MVC · PostgreSQL directo</footer></body></html>
+</main><footer>Aplicación web monolítica MVC · PostgreSQL directo</footer><div class="toast-container" id="toastContainer"></div><script>(function(){
+function showToast(type,message){
+  var c=document.getElementById('toastContainer');
+  var t=document.createElement('div');
+  t.className='toast toast-'+type;
+  var span=document.createElement('span');
+  span.textContent=message;
+  var close=document.createElement('button');
+  close.className='toast-close';close.type='button';close.setAttribute('aria-label','Cerrar');close.innerHTML='&times;';
+  t.appendChild(span);t.appendChild(close);
+  c.appendChild(t);
+  requestAnimationFrame(function(){t.classList.add('show')});
+  var remove=function(){t.classList.remove('show');setTimeout(function(){t.remove()},250)};
+  var timer=setTimeout(remove,4500);
+  close.addEventListener('click',function(){clearTimeout(timer);remove()});
+}
+var FLASH_MESSAGES={
+  login_success:{type:'success',message:'Sesión iniciada correctamente.'},
+  logout_success:{type:'success',message:'Sesión cerrada correctamente.'},
+  register_success:{type:'success',message:'Cuenta creada. Ahora puedes iniciar sesión.'}
+};
+var params=new URLSearchParams(location.search);
+var code=params.get('flash');
+if(code&&FLASH_MESSAGES[code]){
+  var f=FLASH_MESSAGES[code];
+  showToast(f.type,f.message);
+  params.delete('flash');
+  var qs=params.toString();
+  history.replaceState({},'',location.pathname+(qs?'?'+qs:'')+location.hash);
+}
+var inlineError=document.querySelector('[data-flash-error]');
+if(inlineError){showToast('error',inlineError.getAttribute('data-flash-error'))}
+})();</script></body></html>

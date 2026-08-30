@@ -166,6 +166,28 @@ body.auth-page main{max-width:none;margin:0;padding:1.5rem;min-height:100vh;disp
 .auth-form-panel .switch a:hover{text-decoration:underline}
 .auth-form-panel .error{background:#fbeaea;border:1px solid #edc6c6;color:var(--danger);padding:.65rem .8rem;border-radius:8px;font-size:.85rem;font-weight:600;margin:0}
 
+/* Error modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(28,20,10,.55);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:1.5rem;z-index:100}
+.modal-box{background:var(--surface);border-radius:16px;max-width:420px;width:100%;padding:2rem 1.9rem 1.8rem;text-align:center;box-shadow:0 25px 60px -15px rgba(10,15,10,.45),0 0 0 1px rgba(43,32,19,.06);animation:modal-pop .18s ease-out}
+.modal-icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;color:#fff}
+.modal-icon svg{width:26px;height:26px}
+.modal-icon-error{background:var(--danger)}
+.modal-icon-warning{background:var(--accent)}
+.modal-box h1{margin:0 0 .6rem;font-size:1.35rem}
+.modal-message{color:var(--ink-soft);margin:0 0 1.5rem;line-height:1.5}
+.modal-actions{display:flex;justify-content:center;gap:.7rem}
+@keyframes modal-pop{from{opacity:0;transform:scale(.94) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+/* Toasts */
+.toast-container{position:fixed;top:1.2rem;right:1.2rem;display:flex;flex-direction:column;gap:.6rem;z-index:200;max-width:min(360px,90vw)}
+.toast{display:flex;align-items:center;gap:.6rem;background:var(--surface);border:1px solid var(--border-soft);border-left:4px solid var(--ink-soft);border-radius:10px;padding:.75rem .9rem;box-shadow:var(--shadow-lg);opacity:0;transform:translateX(20px);transition:opacity .25s,transform .25s;font-size:.9rem;font-weight:600;color:var(--ink)}
+.toast.show{opacity:1;transform:translateX(0)}
+.toast-success{border-left-color:var(--ok)}
+.toast-error{border-left-color:var(--danger)}
+.toast span{flex:1}
+.toast-close{background:none;border:0;box-shadow:none;padding:0;font-size:1.1rem;line-height:1;color:var(--ink-soft);cursor:pointer}
+.toast-close:hover{background:none;color:var(--ink)}
+
 @media(max-width:650px){
   header{flex-wrap:wrap}
   header nav{order:3;flex-basis:100%}
