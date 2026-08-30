@@ -71,6 +71,8 @@ button:hover,.button:hover{background:var(--primary-light);box-shadow:var(--shad
 button:active,.button:active{transform:translateY(1px)}
 .danger{background:var(--danger)}
 .danger:hover{background:var(--danger-dark)}
+.secondary{background:var(--surface-alt);color:var(--ink);border:1.5px solid var(--border)}
+.secondary:hover{background:var(--surface)}
 .inline{display:inline;margin-left:.5rem}
 .error{color:var(--danger);font-weight:600}
 
@@ -176,6 +178,7 @@ body.auth-page main{max-width:none;margin:0;padding:1.5rem;min-height:100vh;disp
 .modal-box h1{margin:0 0 .6rem;font-size:1.35rem}
 .modal-message{color:var(--ink-soft);margin:0 0 1.5rem;line-height:1.5}
 .modal-actions{display:flex;justify-content:center;gap:.7rem}
+#confirmModal[hidden]{display:none}
 @keyframes modal-pop{from{opacity:0;transform:scale(.94) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
 
 /* Toasts */

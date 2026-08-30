@@ -1,4 +1,4 @@
-</main><footer>Aplicación web monolítica MVC · PostgreSQL directo</footer><div class="toast-container" id="toastContainer"></div><script>(function(){
+</main><footer>Aplicación web monolítica MVC · PostgreSQL directo</footer><div class="toast-container" id="toastContainer"></div><div class="modal-backdrop" id="confirmModal" hidden><div class="modal-box" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle"><div class="modal-icon modal-icon-warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg></div><h1 id="confirmTitle">Confirmar acción</h1><p class="modal-message" id="confirmMessage"></p><div class="modal-actions"><button type="button" class="button secondary" id="confirmCancel">Cancelar</button><button type="button" class="button danger" id="confirmAccept">Confirmar</button></div></div></div><script>(function(){
 function showToast(type,message){
   var c=document.getElementById('toastContainer');
   var t=document.createElement('div');
@@ -30,4 +30,28 @@ if(code&&FLASH_MESSAGES[code]){
 }
 var inlineError=document.querySelector('[data-flash-error]');
 if(inlineError){showToast('error',inlineError.getAttribute('data-flash-error'))}
+
+var confirmModal=document.getElementById('confirmModal');
+var confirmMessage=document.getElementById('confirmMessage');
+var confirmAccept=document.getElementById('confirmAccept');
+var confirmCancel=document.getElementById('confirmCancel');
+var pendingForm=null;
+function closeConfirm(){confirmModal.hidden=true;pendingForm=null}
+confirmCancel.addEventListener('click',closeConfirm);
+confirmModal.addEventListener('click',function(e){if(e.target===confirmModal)closeConfirm()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!confirmModal.hidden)closeConfirm()});
+confirmAccept.addEventListener('click',function(){
+  var form=pendingForm;
+  closeConfirm();
+  if(form)form.submit();
+});
+document.addEventListener('submit',function(e){
+  var message=e.target.getAttribute&&e.target.getAttribute('data-confirm');
+  if(message){
+    e.preventDefault();
+    pendingForm=e.target;
+    confirmMessage.textContent=message;
+    confirmModal.hidden=false;
+  }
+},true);
 })();</script></body></html>
