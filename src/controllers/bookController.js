@@ -15,10 +15,10 @@ function esImagenValida(filePath){
 exports.list=async(req,res,next)=>{try{res.render('books/list',{items:await books.list(req.query.q),q:req.query.q||''})}catch(e){next(e)}};
 exports.detail=async(req,res,next)=>{try{const book=await books.get(req.params.isbn);if(!book)return res.status(404).render('error',{message:'Libro no encontrado.',status:404});res.render('books/detail',{book, ...(await selections())})}catch(e){next(e)}};
 exports.form=async(req,res,next)=>{try{res.render('books/form',{book:req.params.isbn?await books.get(req.params.isbn):null,...(await selections())})}catch(e){next(e)}};
-exports.save=async(req,res,next)=>{try{await books.save(req.body,req.params.isbn);await books.setRelations(req.body.isbn,req.body);res.redirect('/libros/'+req.body.isbn)}catch(e){next(e)}};
-exports.remove=async(req,res,next)=>{try{await books.remove(req.params.isbn);res.redirect('/libros')}catch(e){next(e)}};
-exports.addConcept=async(req,res,next)=>{try{await books.addConcept(req.params.isbn,req.body.id_concepto,req.body.definicion);res.redirect('/libros/'+req.params.isbn)}catch(e){next(e)}};
-exports.removeConcept=async(req,res,next)=>{try{await books.removeConcept(req.params.isbn,req.params.id);res.redirect('/libros/'+req.params.isbn)}catch(e){next(e)}};
+exports.save=async(req,res,next)=>{try{await books.save(req.body,req.params.isbn);await books.setRelations(req.body.isbn,req.body);res.redirect((res.locals.base||'')+'/libros/'+req.body.isbn)}catch(e){next(e)}};
+exports.remove=async(req,res,next)=>{try{await books.remove(req.params.isbn);res.redirect((res.locals.base||'')+'/libros')}catch(e){next(e)}};
+exports.addConcept=async(req,res,next)=>{try{await books.addConcept(req.params.isbn,req.body.id_concepto,req.body.definicion);res.redirect((res.locals.base||'')+'/libros/'+req.params.isbn)}catch(e){next(e)}};
+exports.removeConcept=async(req,res,next)=>{try{await books.removeConcept(req.params.isbn,req.params.id);res.redirect((res.locals.base||'')+'/libros/'+req.params.isbn)}catch(e){next(e)}};
 exports.addImage=async(req,res,next)=>{try{
   let url=req.body.url;
   if(req.file){
@@ -30,6 +30,6 @@ exports.addImage=async(req,res,next)=>{try{
   }
   if(!url)throw new Error('Selecciona una imagen o proporciona una URL.');
   await books.addImage(req.params.isbn,url,req.body.es_principal==='on',req.body.orden);
-  res.redirect('/libros/'+req.params.isbn)
+  res.redirect((res.locals.base||'')+'/libros/'+req.params.isbn)
 }catch(e){next(e)}};
-exports.removeImage=async(req,res,next)=>{try{await books.removeImage(req.params.id);res.redirect('/libros/'+req.params.isbn)}catch(e){next(e)}};
+exports.removeImage=async(req,res,next)=>{try{await books.removeImage(req.params.id);res.redirect((res.locals.base||'')+'/libros/'+req.params.isbn)}catch(e){next(e)}};
